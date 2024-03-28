@@ -1,0 +1,25 @@
+rvec = [3207,5459,2714];%km
+vvec = [-6.532,.7835,6.142];%km/s
+tf = 24;%hrs time span
+timespan = [0 tf*60*60];%time in secs
+muearth=398600;%km^3/s^2
+%make sure units match
+%plot trajectory
+%equation of motion r..=-mu*rvec/r^3
+%set to call ode
+options = odeset('RelTol',1e-8,'AbsTol',1e-8);%tolerances
+initalstate = [rvec vvec];%state vector
+%output = ode45(@name of function,timespan,state,options,anything else) 
+% ode45 input requirements and order
+
+[tnew,statenew]=ode45(@VelAccelVEC,timespan,initalstate,options,muearth);
+%position at 24 hours
+disp("spacecraft position norm at 24 hours [km]; "+ sqrt(statenew(end,1)^2+statenew(end,2)^2+statenew(end,3)^2))
+
+figure
+plot3(statenew(:,1),statenew(:,2),statenew(:,3))
+grid on
+hold on
+plot3(statenew(1,1),statenew(1,2),statenew(1,3),'k*','Color','r')
+hold on
+plot3(statenew(end,1),statenew(end,2),statenew(end,3),'k*','Color','b')
